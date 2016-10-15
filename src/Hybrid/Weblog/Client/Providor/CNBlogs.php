@@ -41,123 +41,107 @@ class CNBlogs implements BloggerInterface, MetaWeblogInterface, WordPressInterfa
     
     public function editPost($postId, Post $post, $publish)
     {
-        if (!$this->rpcClient->query(
+        return $this->query(
                 'metaWeblog.editPost', 
                 $postId, 
                 $this->username, 
                 $this->password,
                 $post,
                 $publish
-                )) {
-            throw new QueryException('An error occurred - ' . $this->rpcClient->getErrorCode() . ":" . $this->rpcClient->getErrorMessage());
-        }
-        return $this->rpcClient->getResponse();
+        );
     }
 
     public function getCategories()
     {
-        if (!$this->rpcClient->query(
+        return $this->query(
                 'metaWeblog.getCategories', 
                 $this->blogId, 
                 $this->username, 
-                $this->password)) {
-            throw new QueryException('An error occurred - ' . $this->rpcClient->getErrorCode() . ":" . $this->rpcClient->getErrorMessage());
-        }
-        return $this->rpcClient->getResponse();
+                $this->password
+        );
     }
 
     public function getPost($postId)
     {
-        if (!$this->rpcClient->query(
+        return $this->query(
                 'metaWeblog.getPost', 
                 $postId, 
                 $this->username, 
-                $this->password)) {
-            throw new QueryException('An error occurred - ' . $this->rpcClient->getErrorCode() . ":" . $this->rpcClient->getErrorMessage());
-        }
-        return $this->rpcClient->getResponse();
+                $this->password
+        );
     }
 
     public function getRecentPosts($numberOfPosts)
     {
-        if (!$this->rpcClient->query(
+        return $this->query(
                 'metaWeblog.getRecentPosts', 
                 $this->blogId, 
                 $this->username, 
                 $this->password,
                 $numberOfPosts
-                )) {
-            throw new QueryException('An error occurred - ' . $this->rpcClient->getErrorCode() . ":" . $this->rpcClient->getErrorMessage());
-        }
-        return $this->rpcClient->getResponse();
+        );
     }
 
     public function newCategory(WPCategory $category)
     {
-        if (!$this->rpcClient->query(
+        return $this->query(
                 'wp.newCategory', 
                 $this->blogId, 
                 $this->username, 
                 $this->password,
                 $category
-                )) {
-            throw new QueryException('An error occurred - ' . $this->rpcClient->getErrorCode() . ":" . $this->rpcClient->getErrorMessage());
-        }
-        return $this->rpcClient->getResponse();
+        );
     }
 
     public function newMediaObject(FileData $file)
     {
-        if (!$this->rpcClient->query(
+        return $this->query(
                 'metaWeblog.newMediaObject', 
                 $this->blogId, 
                 $this->username, 
                 $this->password,
                 $file
-                )) {
-            throw new QueryException('An error occurred - ' . $this->rpcClient->getErrorCode() . ":" . $this->rpcClient->getErrorMessage());
-        }
-        return $this->rpcClient->getResponse();
+        );
     }
 
     public function newPost(Post $post, $publish)
     {
-        if (!$this->rpcClient->query(
+        return $this->query(
                 'metaWeblog.getPost', 
                 $this->blogId, 
                 $this->username, 
                 $this->password,
                 $post,
                 $publish
-                )) {
-            throw new QueryException('An error occurred - ' . $this->rpcClient->getErrorCode() . ":" . $this->rpcClient->getErrorMessage());
-        }
-        return $this->rpcClient->getResponse();
+       );
     }
 
     public function deletePost($postId, $publish)
     {
-        if (!$this->rpcClient->query(
+        return $this->query(
                 'blogger.deletePost', 
                 $this->appKey, 
                 $postId,
                 $this->username, 
                 $this->password,
                 $publish
-                )) {
-            throw new QueryException('An error occurred - ' . $this->rpcClient->getErrorCode() . ":" . $this->rpcClient->getErrorMessage());
-        }
-        return $this->rpcClient->getResponse();
+        );
     }
 
     public function getUsersBlogs()
     {
-        if (!$this->rpcClient->query(
+        return $this->query(
                 'blogger.getUsersBlogs', 
                 $this->appKey, 
                 $this->username, 
                 $this->password
-                )) {
+        );
+    }
+    
+    protected function query()
+    {
+        $args = func_get_args();
+        if (!$this->rpcClient->query($args)) {
             throw new QueryException('An error occurred - ' . $this->rpcClient->getErrorCode() . ":" . $this->rpcClient->getErrorMessage());
         }
         return $this->rpcClient->getResponse();
